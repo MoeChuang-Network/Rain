@@ -617,7 +617,7 @@ class _SettingsPageState extends State<SettingsPage> {
               );
             },
           ),
-          SettingCard(
+          if (Platform.isAndroid) SettingCard(
             icon: const Icon(IconsaxPlusLinear.setting_3),
             text: 'widget'.tr,
             onPressed: () {
