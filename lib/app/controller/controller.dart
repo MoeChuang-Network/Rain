@@ -217,12 +217,15 @@ class WeatherController extends GetxController {
 
     isLoading.value = false;
 
-    Future.delayed(const Duration(milliseconds: 30), () {
-      itemScrollController.scrollTo(
-        index: hourOfDay.value,
-        duration: const Duration(seconds: 2),
-        curve: Curves.easeInOutCubic,
-      );
+    // TODO: iOS device scrolling position is still wrong
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (itemScrollController.isAttached) {
+        itemScrollController.scrollTo(
+          index: hourOfDay.value,
+          duration: const Duration(seconds: 2),
+          curve: Curves.easeInOutCubic,
+        );
+      }
     });
   }
 
