@@ -5,10 +5,10 @@ import 'package:shimmer/shimmer.dart';
 class MyShimmer extends StatelessWidget {
   const MyShimmer({
     super.key,
-    required this.hight,
+    required this.height,
     this.edgeInsetsMargin,
   });
-  final double hight;
+  final double height;
   final EdgeInsets? edgeInsetsMargin;
 
   @override
@@ -19,7 +19,7 @@ class MyShimmer extends StatelessWidget {
       child: Card(
         margin: edgeInsetsMargin,
         child: SizedBox(
-          height: hight,
+          height: height,
         ),
       ),
     );

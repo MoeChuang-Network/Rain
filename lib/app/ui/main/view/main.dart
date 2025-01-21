@@ -36,22 +36,22 @@ class _MainPageState extends State<MainPage> {
             return ListView(
               children: const [
                 MyShimmer(
-                  hight: 200,
+                  height: 200,
                 ),
                 MyShimmer(
-                  hight: 130,
+                  height: 130,
                   edgeInsetsMargin: EdgeInsets.symmetric(vertical: 15),
                 ),
                 MyShimmer(
-                  hight: 90,
+                  height: 90,
                   edgeInsetsMargin: EdgeInsets.only(bottom: 15),
                 ),
                 MyShimmer(
-                  hight: 400,
+                  height: 400,
                   edgeInsetsMargin: EdgeInsets.only(bottom: 15),
                 ),
                 MyShimmer(
-                  hight: 450,
+                  height: 450,
                   edgeInsetsMargin: EdgeInsets.only(bottom: 15),
                 )
               ],
