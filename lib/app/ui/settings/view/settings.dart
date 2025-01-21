@@ -961,7 +961,7 @@ class _SettingsPageState extends State<SettingsPage> {
             infoWidget: _TextInfo(
               info: appLanguages.firstWhere(
                   (element) => (element['locale'] == locale),
-                  orElse: () => appLanguages.first)['name'],
+                  orElse: () => appLanguages[4])['name'], // The fourth is English
             ),
             onPressed: () {
               showModalBottomSheet(
