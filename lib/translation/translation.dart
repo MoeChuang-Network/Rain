@@ -11,6 +11,7 @@ import 'package:rain/translation/ga_ie.dart';
 import 'package:rain/translation/hi_in.dart';
 import 'package:rain/translation/hu_hu.dart';
 import 'package:rain/translation/it_it.dart';
+import 'package:rain/translation/ja_jp.dart';
 import 'package:rain/translation/ka_ge.dart';
 import 'package:rain/translation/ko_kr.dart';
 import 'package:rain/translation/nl_nl.dart';
@@ -42,6 +43,7 @@ class Translation extends Translations {
         'ro_RO': RoRo().messages,
         'zh_CN': ZhCh().messages,
         'zh_TW': ZhTw().messages,
+        'ja_JP': JaJp().messages,
         'pl_PL': PlPl().messages,
         'ur_PK': UrPk().messages,
         'cs_CZ': CsCz().messages,
