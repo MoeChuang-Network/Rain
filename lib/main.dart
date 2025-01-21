@@ -143,7 +143,10 @@ Future<void> isarInit() async {
       isar.locationCaches.where().findFirstSync() ?? LocationCache();
 
   if (settings.language == null) {
-    settings.language = '${Get.deviceLocale}';
+    Locale deviceLocale = Get.deviceLocale ?? Locale('en', 'US');
+    String languageCode = deviceLocale.languageCode;
+    String countryCode = '_${deviceLocale.countryCode ?? ''}';
+    settings.language = '$languageCode$countryCode';
     isar.writeTxnSync(() => isar.settings.putSync(settings));
   }
 
@@ -276,8 +279,12 @@ class _MyAppState extends State<MyApp> {
     materialColor = settings.materialColor;
     roundDegree = settings.roundDegree;
     largeElement = settings.largeElement;
-    locale = Locale(
-        settings.language!.substring(0, 2), settings.language!.substring(3));
+    List<String> language = settings.language!.split('_');
+    if (language.length == 2) {
+      locale = Locale(language.first, language.last);
+    } else {
+      locale = Locale('en', 'US');
+    }
     timeRange = settings.timeRange ?? 1;
     timeStart = settings.timeStart ?? '09:00';
     timeEnd = settings.timeEnd ?? '21:00';
