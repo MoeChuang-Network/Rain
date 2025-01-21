@@ -351,10 +351,16 @@ class _SelectGeolocationState extends State<SelectGeolocation> {
                                               return;
                                             }
                                             setState(() => isLoading = true);
-                                            final location =
-                                                await weatherController
-                                                    .getCurrentLocationSearch();
-                                            fillControllerGeo(location);
+                                            try {
+                                              final location =
+                                                  await weatherController
+                                                      .getCurrentLocationSearch();
+                                              fillControllerGeo(location);
+                                            }
+                                            catch(e) {
+                                              Get.snackbar('error', e.toString());
+                                              // TODO: Disable the button
+                                            }
                                             setState(() => isLoading = false);
                                           },
                                           icon: const Icon(
