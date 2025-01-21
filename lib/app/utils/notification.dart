@@ -23,8 +23,22 @@ class NotificationShow {
       enableVibration: false,
       largeIcon: FilePathAndroidBitmap(imagePath),
     );
-    NotificationDetails notificationDetails =
-        NotificationDetails(android: androidNotificationDetails);
+
+    DarwinNotificationDetails darwinNotificationDetails =
+        DarwinNotificationDetails(
+            presentAlert: false,
+            presentSound: false,
+            presentBadge: false,
+            presentList: false,
+            presentBanner: false,
+            interruptionLevel: InterruptionLevel.passive,
+            subtitle: 'Rain notification',
+            categoryIdentifier: 'plainNotification');
+
+    NotificationDetails notificationDetails = NotificationDetails(
+        android: androidNotificationDetails,
+        iOS: darwinNotificationDetails,
+        macOS: darwinNotificationDetails);
 
     var scheduledTime = tz.TZDateTime.from(date, tz.local);
     flutterLocalNotificationsPlugin.zonedSchedule(

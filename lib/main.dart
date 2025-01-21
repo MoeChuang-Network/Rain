@@ -103,18 +103,35 @@ void main() async {
   tz.initializeTimeZones();
   tz.setLocalLocation(tz.getLocation(timeZoneName));
   await isarInit();
-  const AndroidInitializationSettings initializationSettingsAndroid =
+
+  const String darwinNotificationCategoryPlain = 'plainNotification';
+
+  final List<DarwinNotificationCategory> darwinNotificationCategories =
+  <DarwinNotificationCategory>[
+    DarwinNotificationCategory(
+      darwinNotificationCategoryPlain,
+    ),
+  ];
+
+  final AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('@mipmap/ic_launcher');
-  const DarwinInitializationSettings initializationSettingsDarwin =
-      DarwinInitializationSettings();
-  const LinuxInitializationSettings initializationSettingsLinux =
-      LinuxInitializationSettings(defaultActionName: 'Rain');
-  const InitializationSettings initializationSettings = InitializationSettings(
+  final DarwinInitializationSettings initializationSettingsDarwin =
+  DarwinInitializationSettings(
+    requestSoundPermission: false,
+    requestBadgePermission: false,
+    requestAlertPermission: false,
+    notificationCategories: darwinNotificationCategories,
+  );
+  final LinuxInitializationSettings initializationSettingsLinux =
+      LinuxInitializationSettings(defaultActionName: 'Open Notification');
+  final InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
     iOS: initializationSettingsDarwin,
+    macOS: initializationSettingsDarwin,
     linux: initializationSettingsLinux,
   );
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
   runApp(const MyApp());
 }
 

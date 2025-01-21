@@ -130,18 +130,20 @@ class _SettingsPageState extends State<SettingsPage> {
                                       newAmoledTheme: value);
                                 },
                               ),
-                              if (!Platform.isIOS) SettingCard(
-                                elevation: 4,
-                                icon: const Icon(IconsaxPlusLinear.colorfilter),
-                                text: 'materialColor'.tr,
-                                switcher: true,
-                                value: settings.materialColor,
-                                onChange: (value) {
-                                  themeController.saveMaterialTheme(value);
-                                  MyApp.updateAppState(context,
-                                      newMaterialColor: value);
-                                },
-                              ),
+                              if (!Platform.isIOS)
+                                SettingCard(
+                                  elevation: 4,
+                                  icon:
+                                      const Icon(IconsaxPlusLinear.colorfilter),
+                                  text: 'materialColor'.tr,
+                                  switcher: true,
+                                  value: settings.materialColor,
+                                  onChange: (value) {
+                                    themeController.saveMaterialTheme(value);
+                                    MyApp.updateAppState(context,
+                                        newMaterialColor: value);
+                                  },
+                                ),
                               SettingCard(
                                 elevation: 4,
                                 icon: const Icon(IconsaxPlusLinear.additem),
@@ -265,33 +267,52 @@ class _SettingsPageState extends State<SettingsPage> {
                                   setState(() {});
                                 },
                               ),
-                              SettingCard(
-                                elevation: 4,
-                                icon: const Icon(
-                                    IconsaxPlusLinear.notification_1),
-                                text: 'notifications'.tr,
-                                switcher: true,
-                                value: settings.notifications,
-                                onChange: (value) async {
-                                  final resultExact =
-                                      await flutterLocalNotificationsPlugin
-                                          .resolvePlatformSpecificImplementation<
-                                              AndroidFlutterLocalNotificationsPlugin>()
-                                          ?.requestExactAlarmsPermission();
-                                  final result = Platform.isIOS
-                                      ? await flutterLocalNotificationsPlugin
-                                          .resolvePlatformSpecificImplementation<
+                              if (Platform.isAndroid || Platform.isIOS)
+                                SettingCard(
+                                  elevation: 4,
+                                  icon: const Icon(
+                                      IconsaxPlusLinear.notification_1),
+                                  text: 'notifications'.tr,
+                                  switcher: true,
+                                  value: settings.notifications,
+                                  onChange: (value) async {
+                                    switch (Platform.operatingSystem) {
+                                      case 'ios':
+                                        {
+                                          final notification =
+                                          await flutterLocalNotificationsPlugin
+                                              .resolvePlatformSpecificImplementation<
                                               IOSFlutterLocalNotificationsPlugin>()
-                                          ?.requestPermissions()
-                                      : await flutterLocalNotificationsPlugin
-                                          .resolvePlatformSpecificImplementation<
+                                              ?.requestPermissions();
+                                          if (notification != null) {
+                                            isar.writeTxnSync(() {
+                                              settings.notifications = value;
+                                              isar.settings.putSync(settings);
+                                            });
+                                          }
+                                          break;
+                                        }
+                                      case 'android':
+                                        {
+                                          final alarm = await flutterLocalNotificationsPlugin
+                                              .resolvePlatformSpecificImplementation<
                                               AndroidFlutterLocalNotificationsPlugin>()
-                                          ?.requestNotificationsPermission();
-                                  if (result != null && resultExact != null) {
-                                    isar.writeTxnSync(() {
-                                      settings.notifications = value;
-                                      isar.settings.putSync(settings);
-                                    });
+                                              ?.requestExactAlarmsPermission();
+                                          final notification =
+                                          await flutterLocalNotificationsPlugin
+                                              .resolvePlatformSpecificImplementation<
+                                              AndroidFlutterLocalNotificationsPlugin>()
+                                              ?.requestNotificationsPermission();
+                                          if (notification != null &&
+                                              alarm != null) {
+                                            isar.writeTxnSync(() {
+                                              settings.notifications = value;
+                                              isar.settings.putSync(settings);
+                                            });
+                                          }
+                                          break;
+                                        }
+                                    }
                                     if (value) {
                                       weatherController.notification(
                                           weatherController.mainWeather);
@@ -300,9 +321,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                           .cancelAll();
                                     }
                                     setState(() {});
-                                  }
-                                },
-                              ),
+                                  },
+                                ),
                               SettingCard(
                                 elevation: 4,
                                 icon: const Icon(
@@ -339,13 +359,21 @@ class _SettingsPageState extends State<SettingsPage> {
                                 infoSettings: true,
                                 infoWidget: _TextInfo(
                                   info: () {
-                                    Locale currentLocale = Localizations.localeOf(context);
-                                    DateFormat dateFormat24 = DateFormat("HH:mm", currentLocale.toLanguageTag());
-                                    DateFormat dateFormat12 = DateFormat("hh:mm a", currentLocale.toLanguageTag());
+                                    Locale currentLocale =
+                                        Localizations.localeOf(context);
+                                    DateFormat dateFormat24 = DateFormat(
+                                        "HH:mm", currentLocale.toLanguageTag());
+                                    DateFormat dateFormat12 = DateFormat(
+                                        "hh:mm a",
+                                        currentLocale.toLanguageTag());
                                     try {
-                                      final time24 = dateFormat24.parse(timeStart);
-                                      final time12 = dateFormat12.format(time24);
-                                      return settings.timeformat == '12' ? time12 : timeStart;
+                                      final time24 =
+                                          dateFormat24.parse(timeStart);
+                                      final time12 =
+                                          dateFormat12.format(time24);
+                                      return settings.timeformat == '12'
+                                          ? time12
+                                          : timeStart;
                                     } catch (_) {
                                       return timeStart;
                                     }
@@ -398,13 +426,21 @@ class _SettingsPageState extends State<SettingsPage> {
                                 infoSettings: true,
                                 infoWidget: _TextInfo(
                                   info: () {
-                                    Locale currentLocale = Localizations.localeOf(context);
-                                    DateFormat dateFormat24 = DateFormat("HH:mm", currentLocale.toLanguageTag());
-                                    DateFormat dateFormat12 = DateFormat("hh:mm a", currentLocale.toLanguageTag());
+                                    Locale currentLocale =
+                                        Localizations.localeOf(context);
+                                    DateFormat dateFormat24 = DateFormat(
+                                        "HH:mm", currentLocale.toLanguageTag());
+                                    DateFormat dateFormat12 = DateFormat(
+                                        "hh:mm a",
+                                        currentLocale.toLanguageTag());
                                     try {
-                                      final time24 = dateFormat24.parse(timeEnd);
-                                      final time12 = dateFormat12.format(time24);
-                                      return settings.timeformat == '12' ? time12 : timeEnd;
+                                      final time24 =
+                                          dateFormat24.parse(timeEnd);
+                                      final time12 =
+                                          dateFormat12.format(time24);
+                                      return settings.timeformat == '12'
+                                          ? time12
+                                          : timeEnd;
                                     } catch (_) {
                                       return timeEnd;
                                       // Locale like bn-IN cannot be correctly handled by Flutter,
@@ -617,237 +653,246 @@ class _SettingsPageState extends State<SettingsPage> {
               );
             },
           ),
-          if (Platform.isAndroid) SettingCard(
-            icon: const Icon(IconsaxPlusLinear.setting_3),
-            text: 'widget'.tr,
-            onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                builder: (BuildContext context) {
-                  return Padding(
-                    padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).padding.bottom),
-                    child: StatefulBuilder(
-                      builder: (BuildContext context, setState) {
-                        return SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 15),
-                                child: Text(
-                                  'widget'.tr,
-                                  style: context.textTheme.titleLarge?.copyWith(
-                                    fontSize: 20,
+          if (Platform.isAndroid)
+            SettingCard(
+              icon: const Icon(IconsaxPlusLinear.setting_3),
+              text: 'widget'.tr,
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Padding(
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).padding.bottom),
+                      child: StatefulBuilder(
+                        builder: (BuildContext context, setState) {
+                          return SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 15),
+                                  child: Text(
+                                    'widget'.tr,
+                                    style:
+                                        context.textTheme.titleLarge?.copyWith(
+                                      fontSize: 20,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              SettingCard(
-                                elevation: 4,
-                                icon: const Icon(IconsaxPlusLinear.add_square),
-                                text: 'addWidget'.tr,
-                                onPressed: () {
-                                  HomeWidget.requestPinWidget(
-                                    name: androidWidgetName,
-                                    androidName: androidWidgetName,
-                                    qualifiedAndroidName:
-                                        'com.yoshi.rain.OreoWidget',
-                                  );
-                                },
-                              ),
-                              SettingCard(
-                                elevation: 4,
-                                icon:
-                                    const Icon(IconsaxPlusLinear.bucket_square),
-                                text: 'widgetBackground'.tr,
-                                info: true,
-                                infoWidget: CircleAvatar(
-                                  backgroundColor: context.theme.indicatorColor,
-                                  radius: 11,
-                                  child: CircleAvatar(
+                                SettingCard(
+                                  elevation: 4,
+                                  icon:
+                                      const Icon(IconsaxPlusLinear.add_square),
+                                  text: 'addWidget'.tr,
+                                  onPressed: () {
+                                    HomeWidget.requestPinWidget(
+                                      name: androidWidgetName,
+                                      androidName: androidWidgetName,
+                                      qualifiedAndroidName:
+                                          'com.yoshi.rain.OreoWidget',
+                                    );
+                                  },
+                                ),
+                                SettingCard(
+                                  elevation: 4,
+                                  icon: const Icon(
+                                      IconsaxPlusLinear.bucket_square),
+                                  text: 'widgetBackground'.tr,
+                                  info: true,
+                                  infoWidget: CircleAvatar(
                                     backgroundColor:
-                                        widgetBackgroundColor.isEmpty
-                                            ? context.theme.primaryColor
-                                            : HexColor.fromHex(
-                                                widgetBackgroundColor),
-                                    radius: 10,
+                                        context.theme.indicatorColor,
+                                    radius: 11,
+                                    child: CircleAvatar(
+                                      backgroundColor:
+                                          widgetBackgroundColor.isEmpty
+                                              ? context.theme.primaryColor
+                                              : HexColor.fromHex(
+                                                  widgetBackgroundColor),
+                                      radius: 10,
+                                    ),
                                   ),
-                                ),
-                                onPressed: () {
-                                  colorBackground = null;
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => Dialog(
-                                      child: SingleChildScrollView(
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 15),
-                                              child: Text(
-                                                'widgetBackground'.tr,
-                                                style: context
-                                                    .textTheme.titleMedium
-                                                    ?.copyWith(fontSize: 18),
+                                  onPressed: () {
+                                    colorBackground = null;
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => Dialog(
+                                        child: SingleChildScrollView(
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 15),
+                                                child: Text(
+                                                  'widgetBackground'.tr,
+                                                  style: context
+                                                      .textTheme.titleMedium
+                                                      ?.copyWith(fontSize: 18),
+                                                ),
                                               ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 15),
-                                              child: Theme(
-                                                data: context.theme.copyWith(
-                                                  inputDecorationTheme:
-                                                      InputDecorationTheme(
-                                                    border: OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 15),
+                                                child: Theme(
+                                                  data: context.theme.copyWith(
+                                                    inputDecorationTheme:
+                                                        InputDecorationTheme(
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                                child: ColorPicker(
-                                                  color: widgetBackgroundColor
-                                                          .isEmpty
-                                                      ? context
-                                                          .theme.primaryColor
-                                                      : HexColor.fromHex(
-                                                          widgetBackgroundColor),
-                                                  onChanged: (pickedColor) {
-                                                    colorBackground =
-                                                        pickedColor.toHex();
-                                                  },
-                                                ),
-                                              ),
-                                            ),
-                                            IconButton(
-                                              icon: const Icon(
-                                                IconsaxPlusLinear.tick_square,
-                                              ),
-                                              onPressed: () {
-                                                if (colorBackground == null) {
-                                                  return;
-                                                }
-                                                weatherController
-                                                    .updateWidgetBackgroundColor(
-                                                        colorBackground!);
-                                                MyApp.updateAppState(context,
-                                                    newWidgetBackgroundColor:
-                                                        colorBackground);
-                                                Get.back();
-                                              },
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                              SettingCard(
-                                elevation: 4,
-                                icon: const Icon(IconsaxPlusLinear.text_block),
-                                text: 'widgetText'.tr,
-                                info: true,
-                                infoWidget: CircleAvatar(
-                                  backgroundColor: context.theme.indicatorColor,
-                                  radius: 11,
-                                  child: CircleAvatar(
-                                    backgroundColor: widgetTextColor.isEmpty
-                                        ? context.theme.primaryColor
-                                        : HexColor.fromHex(widgetTextColor),
-                                    radius: 10,
-                                  ),
-                                ),
-                                onPressed: () {
-                                  colorText = null;
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => Dialog(
-                                      child: SingleChildScrollView(
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 15),
-                                              child: Text(
-                                                'widgetText'.tr,
-                                                style: context
-                                                    .textTheme.titleMedium
-                                                    ?.copyWith(fontSize: 18),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 15),
-                                              child: Theme(
-                                                data: context.theme.copyWith(
-                                                  inputDecorationTheme:
-                                                      InputDecorationTheme(
-                                                    border: OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
-                                                    ),
+                                                  child: ColorPicker(
+                                                    color: widgetBackgroundColor
+                                                            .isEmpty
+                                                        ? context
+                                                            .theme.primaryColor
+                                                        : HexColor.fromHex(
+                                                            widgetBackgroundColor),
+                                                    onChanged: (pickedColor) {
+                                                      colorBackground =
+                                                          pickedColor.toHex();
+                                                    },
                                                   ),
                                                 ),
-                                                child: ColorPicker(
-                                                  color: widgetTextColor.isEmpty
-                                                      ? context
-                                                          .theme.primaryColor
-                                                      : HexColor.fromHex(
-                                                          widgetTextColor),
-                                                  onChanged: (pickedColor) {
-                                                    colorText =
-                                                        pickedColor.toHex();
-                                                  },
+                                              ),
+                                              IconButton(
+                                                icon: const Icon(
+                                                  IconsaxPlusLinear.tick_square,
                                                 ),
+                                                onPressed: () {
+                                                  if (colorBackground == null) {
+                                                    return;
+                                                  }
+                                                  weatherController
+                                                      .updateWidgetBackgroundColor(
+                                                          colorBackground!);
+                                                  MyApp.updateAppState(context,
+                                                      newWidgetBackgroundColor:
+                                                          colorBackground);
+                                                  Get.back();
+                                                },
                                               ),
-                                            ),
-                                            IconButton(
-                                              icon: const Icon(
-                                                IconsaxPlusLinear.tick_square,
-                                              ),
-                                              onPressed: () {
-                                                if (colorText == null) return;
-                                                weatherController
-                                                    .updateWidgetTextColor(
-                                                        colorText!);
-                                                MyApp.updateAppState(context,
-                                                    newWidgetTextColor:
-                                                        colorText);
-                                                Get.back();
-                                              },
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
+                                    );
+                                  },
+                                ),
+                                SettingCard(
+                                  elevation: 4,
+                                  icon:
+                                      const Icon(IconsaxPlusLinear.text_block),
+                                  text: 'widgetText'.tr,
+                                  info: true,
+                                  infoWidget: CircleAvatar(
+                                    backgroundColor:
+                                        context.theme.indicatorColor,
+                                    radius: 11,
+                                    child: CircleAvatar(
+                                      backgroundColor: widgetTextColor.isEmpty
+                                          ? context.theme.primaryColor
+                                          : HexColor.fromHex(widgetTextColor),
+                                      radius: 10,
                                     ),
-                                  );
-                                },
-                              ),
-                              const Gap(10),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                },
-              );
-            },
-          ),
+                                  ),
+                                  onPressed: () {
+                                    colorText = null;
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => Dialog(
+                                        child: SingleChildScrollView(
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 15),
+                                                child: Text(
+                                                  'widgetText'.tr,
+                                                  style: context
+                                                      .textTheme.titleMedium
+                                                      ?.copyWith(fontSize: 18),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 15),
+                                                child: Theme(
+                                                  data: context.theme.copyWith(
+                                                    inputDecorationTheme:
+                                                        InputDecorationTheme(
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  child: ColorPicker(
+                                                    color: widgetTextColor
+                                                            .isEmpty
+                                                        ? context
+                                                            .theme.primaryColor
+                                                        : HexColor.fromHex(
+                                                            widgetTextColor),
+                                                    onChanged: (pickedColor) {
+                                                      colorText =
+                                                          pickedColor.toHex();
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+                                              IconButton(
+                                                icon: const Icon(
+                                                  IconsaxPlusLinear.tick_square,
+                                                ),
+                                                onPressed: () {
+                                                  if (colorText == null) return;
+                                                  weatherController
+                                                      .updateWidgetTextColor(
+                                                          colorText!);
+                                                  MyApp.updateAppState(context,
+                                                      newWidgetTextColor:
+                                                          colorText);
+                                                  Get.back();
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                                const Gap(10),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
           SettingCard(
             icon: const Icon(IconsaxPlusLinear.map),
             text: 'map'.tr,
@@ -961,7 +1006,8 @@ class _SettingsPageState extends State<SettingsPage> {
             infoWidget: _TextInfo(
               info: appLanguages.firstWhere(
                   (element) => (element['locale'] == locale),
-                  orElse: () => appLanguages[4])['name'], // The fourth is English
+                  orElse: () =>
+                      appLanguages[4])['name'], // The fourth is English
             ),
             onPressed: () {
               showModalBottomSheet(
