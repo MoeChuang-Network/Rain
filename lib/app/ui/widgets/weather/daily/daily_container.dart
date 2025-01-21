@@ -28,7 +28,7 @@ class _DailyContainerState extends State<DailyContainer> {
 
   @override
   Widget build(BuildContext context) {
-    final splashColor = context.theme.colorScheme.primary.withOpacity(0.4);
+    final splashColor = context.theme.colorScheme.primary.withAlpha(102);
     const inkWellBorderRadius = BorderRadius.all(
       Radius.circular(16),
     );
