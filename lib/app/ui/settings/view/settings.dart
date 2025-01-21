@@ -1001,6 +1001,8 @@ class _SettingsPageState extends State<SettingsPage> {
                 builder: (BuildContext context) {
                   return Padding(
                     padding: EdgeInsets.only(
+                        left: 20,
+                        right: 20,
                         bottom: MediaQuery.of(context).padding.bottom),
                     child: StatefulBuilder(
                       builder: (BuildContext context, setState) {
@@ -1016,28 +1018,37 @@ class _SettingsPageState extends State<SettingsPage> {
                                 textAlign: TextAlign.center,
                               ),
                             ),
-                            ListView.builder(
+                            ListView.separated(
                               shrinkWrap: true,
                               physics: const BouncingScrollPhysics(),
                               itemCount: appLanguages.length,
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(height: 5),
                               itemBuilder: (context, index) {
-                                return Card(
-                                  elevation: 4,
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 5),
-                                  child: ListTile(
-                                    title: Text(
-                                      appLanguages[index]['name'],
-                                      style: context.textTheme.labelLarge,
-                                      textAlign: TextAlign.center,
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Card(
+                                      elevation: 4,
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 5),
+                                      child: ListTile(
+                                        title: Text(
+                                          appLanguages[index]['name'],
+                                          style: context.textTheme.labelLarge,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        onTap: () {
+                                          MyApp.updateAppState(context,
+                                              newLocale: appLanguages[index]
+                                                  ['locale']);
+                                          updateLanguage(
+                                              appLanguages[index]['locale']);
+                                        },
+                                      ),
                                     ),
-                                    onTap: () {
-                                      MyApp.updateAppState(context,
-                                          newLocale: appLanguages[index]
-                                              ['locale']);
-                                      updateLanguage(
-                                          appLanguages[index]['locale']);
-                                    },
                                   ),
                                 );
                               },
