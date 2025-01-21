@@ -130,7 +130,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       newAmoledTheme: value);
                                 },
                               ),
-                              SettingCard(
+                              if (!Platform.isIOS) SettingCard(
                                 elevation: 4,
                                 icon: const Icon(IconsaxPlusLinear.colorfilter),
                                 text: 'materialColor'.tr,

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 
@@ -19,7 +21,7 @@ class DeviceFeature {
       _androidDeviceInfo = await _deviceInfoPlugin.androidInfo;
     } catch (e) {
       if (kDebugMode) {
-        print('Error initializing device info: $e');
+        if (Platform.isAndroid) print('Error initializing Android device info: $e');
       }
     }
   }
