@@ -179,7 +179,7 @@ class MyApp extends StatefulWidget {
       state.changeAmoledTheme(newAmoledTheme);
     }
     if (newMaterialColor != null) {
-      state.changeMarerialTheme(newMaterialColor);
+      state.changeMaterialTheme(newMaterialColor);
     }
     if (newRoundDegree != null) {
       state.changeRoundDegree(newRoundDegree);
@@ -220,7 +220,7 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  void changeMarerialTheme(bool newMaterialColor) {
+  void changeMaterialTheme(bool newMaterialColor) {
     setState(() {
       materialColor = newMaterialColor;
     });
