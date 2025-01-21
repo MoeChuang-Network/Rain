@@ -63,13 +63,13 @@ class StatusData {
   String getTimeFormat(String time) {
     switch (settings.timeformat) {
       case '12':
-        return DateFormat.jm(locale.languageCode)
+        return DateFormat('h:mm a', locale.toLanguageTag())
             .format(DateTime.tryParse(time)!);
       case '24':
-        return DateFormat.Hm(locale.languageCode)
+        return DateFormat.Hm(locale.toLanguageTag())
             .format(DateTime.tryParse(time)!);
       default:
-        return DateFormat.Hm(locale.languageCode)
+        return DateFormat.Hm(locale.toLanguageTag())
             .format(DateTime.tryParse(time)!);
     }
   }
@@ -77,11 +77,11 @@ class StatusData {
   String getTimeFormatTz(TZDateTime time) {
     switch (settings.timeformat) {
       case '12':
-        return DateFormat.jm(locale.languageCode).format(time);
+        return DateFormat('h:mm a', locale.toLanguageTag()).format(time);
       case '24':
-        return DateFormat.Hm(locale.languageCode).format(time);
+        return DateFormat.Hm(locale.toLanguageTag()).format(time);
       default:
-        return DateFormat.Hm(locale.languageCode).format(time);
+        return DateFormat.Hm(locale.toLanguageTag()).format(time);
     }
   }
 }

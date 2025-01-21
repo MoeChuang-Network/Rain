@@ -7,6 +7,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:home_widget/home_widget.dart';
+import 'package:intl/intl.dart';
 import 'package:isar/isar.dart';
 import 'package:lat_lng_to_timezone/lat_lng_to_timezone.dart' as tzmap;
 import 'package:path_provider/path_provider.dart';
@@ -217,7 +218,6 @@ class WeatherController extends GetxController {
 
     isLoading.value = false;
 
-    // TODO: iOS device scrolling position is still wrong
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (itemScrollController.isAttached) {
         itemScrollController.scrollTo(
@@ -454,13 +454,22 @@ class WeatherController extends GetxController {
   }
 
   TimeOfDay timeConvert(String normTime) {
-    int hh = 0;
-    if (normTime.endsWith('PM')) hh = 12;
-    normTime = normTime.split(' ')[0];
-    return TimeOfDay(
-      hour: hh + int.parse(normTime.split(':')[0]) % 24,
-      minute: int.parse(normTime.split(':')[1]) % 60,
-    );
+    List<String> patterns = ["H:mm", "h:mm a", "HH:mm", "hh:mm a"];
+    for (String pattern in patterns) {
+      try {
+        DateFormat format = DateFormat(pattern);
+        DateTime dateTime = format.parse(normTime);
+
+        int hour = dateTime.hour;
+        int minute = dateTime.minute;
+
+        return TimeOfDay(hour: hour, minute: minute);
+      } catch (e) {
+        continue;
+      }
+    }
+
+    throw FormatException("Invalid time format: $normTime");
   }
 
   Future<String> getLocalImagePath(String icon) async {

@@ -280,10 +280,10 @@ class _SettingsPageState extends State<SettingsPage> {
                                       case 'ios':
                                         {
                                           final notification =
-                                          await flutterLocalNotificationsPlugin
-                                              .resolvePlatformSpecificImplementation<
-                                              IOSFlutterLocalNotificationsPlugin>()
-                                              ?.requestPermissions();
+                                              await flutterLocalNotificationsPlugin
+                                                  .resolvePlatformSpecificImplementation<
+                                                      IOSFlutterLocalNotificationsPlugin>()
+                                                  ?.requestPermissions();
                                           if (notification != null) {
                                             isar.writeTxnSync(() {
                                               settings.notifications = value;
@@ -296,13 +296,13 @@ class _SettingsPageState extends State<SettingsPage> {
                                         {
                                           final alarm = await flutterLocalNotificationsPlugin
                                               .resolvePlatformSpecificImplementation<
-                                              AndroidFlutterLocalNotificationsPlugin>()
+                                                  AndroidFlutterLocalNotificationsPlugin>()
                                               ?.requestExactAlarmsPermission();
                                           final notification =
-                                          await flutterLocalNotificationsPlugin
-                                              .resolvePlatformSpecificImplementation<
-                                              AndroidFlutterLocalNotificationsPlugin>()
-                                              ?.requestNotificationsPermission();
+                                              await flutterLocalNotificationsPlugin
+                                                  .resolvePlatformSpecificImplementation<
+                                                      AndroidFlutterLocalNotificationsPlugin>()
+                                                  ?.requestNotificationsPermission();
                                           if (notification != null &&
                                               alarm != null) {
                                             isar.writeTxnSync(() {
@@ -359,23 +359,19 @@ class _SettingsPageState extends State<SettingsPage> {
                                 infoSettings: true,
                                 infoWidget: _TextInfo(
                                   info: () {
-                                    Locale currentLocale =
-                                        Localizations.localeOf(context);
-                                    DateFormat dateFormat24 = DateFormat(
-                                        "HH:mm", currentLocale.toLanguageTag());
-                                    DateFormat dateFormat12 = DateFormat(
-                                        "hh:mm a",
-                                        currentLocale.toLanguageTag());
                                     try {
-                                      final time24 =
-                                          dateFormat24.parse(timeStart);
-                                      final time12 =
-                                          dateFormat12.format(time24);
+                                      final time24 = DateFormat.Hm('en_US')
+                                          .parse(timeStart);
                                       return settings.timeformat == '12'
-                                          ? time12
-                                          : timeStart;
-                                    } catch (_) {
-                                      return timeStart;
+                                          ? DateFormat("h:mm a",
+                                                  locale.toLanguageTag())
+                                              .format(time24)
+                                          : DateFormat.Hm(
+                                                  (locale.toLanguageTag()))
+                                              .format(time24);
+                                    } catch (e) {
+                                      debugPrint(e.toString());
+                                      return timeEnd;
                                     }
                                   }(),
                                 ),
@@ -426,29 +422,19 @@ class _SettingsPageState extends State<SettingsPage> {
                                 infoSettings: true,
                                 infoWidget: _TextInfo(
                                   info: () {
-                                    Locale currentLocale =
-                                        Localizations.localeOf(context);
-                                    DateFormat dateFormat24 = DateFormat(
-                                        "HH:mm", currentLocale.toLanguageTag());
-                                    DateFormat dateFormat12 = DateFormat(
-                                        "hh:mm a",
-                                        currentLocale.toLanguageTag());
                                     try {
                                       final time24 =
-                                          dateFormat24.parse(timeEnd);
-                                      final time12 =
-                                          dateFormat12.format(time24);
+                                          DateFormat.Hm('en_US').parse(timeEnd);
                                       return settings.timeformat == '12'
-                                          ? time12
-                                          : timeEnd;
-                                    } catch (_) {
+                                          ? DateFormat("h:mm a",
+                                                  locale.toLanguageTag())
+                                              .format(time24)
+                                          : DateFormat.Hm(
+                                                  (locale.toLanguageTag()))
+                                              .format(time24);
+                                    } catch (e) {
+                                      debugPrint(e.toString());
                                       return timeEnd;
-                                      // Locale like bn-IN cannot be correctly handled by Flutter,
-                                      // so we just give up changing the date format
-                                      // Deep dive in:
-                                      // We have HH:mm stored in config but bn-IN only accept H:mm for 24-hour datetime,
-                                      // this may mean that these locales don't have a 24-hour time format,
-                                      // and we have to modify the value multiple times just for 2 strings :(
                                     }
                                   }(),
                                 ),
