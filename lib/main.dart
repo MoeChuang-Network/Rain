@@ -162,9 +162,7 @@ Future<void> isarInit() async {
 
   if (settings.language == null) {
     Locale deviceLocale = Get.deviceLocale ?? Locale('en', 'US');
-    String languageCode = deviceLocale.languageCode;
-    String countryCode = '_${deviceLocale.countryCode ?? ''}';
-    settings.language = '$languageCode$countryCode';
+    settings.language = deviceLocale.toLanguageTag();
     isar.writeTxnSync(() => isar.settings.putSync(settings));
   }
 

@@ -66,7 +66,7 @@ class _DailyContainerState extends State<DailyContainer> {
                       children: [
                         Expanded(
                           child: Text(
-                            DateFormat.EEEE(locale.languageCode)
+                            DateFormat.EEEE(locale.toLanguageTag())
                                 .format((weatherData.timeDaily ?? [])[index]),
                             style: labelLarge,
                             overflow: TextOverflow.ellipsis,

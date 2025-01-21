@@ -68,7 +68,7 @@ class _NowState extends State<Now> {
                 ),
                 const Gap(5),
                 Text(
-                  DateFormat.MMMMEEEEd(locale.languageCode).format(
+                  DateFormat.MMMMEEEEd(locale.toLanguageTag()).format(
                     DateTime.parse(widget.time),
                   ),
                   style: context.textTheme.labelLarge?.copyWith(
@@ -91,7 +91,7 @@ class _NowState extends State<Now> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          DateFormat.MMMMEEEEd(locale.languageCode).format(
+                          DateFormat.MMMMEEEEd(locale.toLanguageTag()).format(
                             DateTime.parse(widget.time),
                           ),
                           style: context.textTheme.labelLarge?.copyWith(

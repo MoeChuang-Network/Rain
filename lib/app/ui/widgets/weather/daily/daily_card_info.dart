@@ -72,7 +72,7 @@ class _DailyCardInfoState extends State<DailyCardInfo> {
           highlightColor: Colors.transparent,
         ),
         title: Text(
-          DateFormat.MMMMEEEEd(locale.languageCode)
+          DateFormat.MMMMEEEEd(locale.toLanguageTag())
               .format(timeDaily[pageIndex]),
           style: textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.w600,

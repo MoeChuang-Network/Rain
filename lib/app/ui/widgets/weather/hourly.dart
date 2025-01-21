@@ -42,7 +42,7 @@ class _HourlyState extends State<Hourly> {
               style: textTheme.labelLarge,
             ),
             Text(
-              DateFormat('E', locale.languageCode)
+              DateFormat('E', locale.toLanguageTag())
                   .format(DateTime.tryParse(time)!),
               style: textTheme.labelLarge?.copyWith(
                 color: Colors.grey,

@@ -50,7 +50,7 @@ class _DailyCardState extends State<DailyCard> {
                         ),
                         const Gap(5),
                         Text(
-                          DateFormat.MMMMEEEEd(locale.languageCode)
+                          DateFormat.MMMMEEEEd(locale.toLanguageTag())
                               .format(widget.timeDaily),
                           style: context.textTheme.titleMedium?.copyWith(
                             color: Colors.grey,
