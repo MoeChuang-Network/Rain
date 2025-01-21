@@ -14,7 +14,7 @@ class SettingCard extends StatelessWidget {
     this.elevation,
     this.dropdownName,
     this.dropdownList,
-    this.dropdownCange,
+    this.dropdownChange,
     this.value,
     this.onPressed,
     this.onChange,
@@ -29,7 +29,7 @@ class SettingCard extends StatelessWidget {
   final Widget? infoWidget;
   final String? dropdownName;
   final List<String>? dropdownList;
-  final Function(String?)? dropdownCange;
+  final Function(String?)? dropdownChange;
   final bool? value;
   final Function()? onPressed;
   final Function(bool)? onChange;
@@ -77,7 +77,7 @@ class SettingCard extends StatelessWidget {
                         child: Text(value),
                       );
                     }).toList(),
-                    onChanged: dropdownCange,
+                    onChanged: dropdownChange,
                   )
                 : info
                     ? infoSettings

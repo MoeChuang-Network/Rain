@@ -98,7 +98,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   'dark'.tr,
                                   'light'.tr
                                 ],
-                                dropdownCange: (String? newValue) {
+                                dropdownChange: (String? newValue) {
                                   final newThemeMode = newValue?.tr;
                                   final darkTheme = 'dark'.tr;
                                   final systemTheme = 'system'.tr;
@@ -317,7 +317,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   '4',
                                   '5',
                                 ],
-                                dropdownCange: (String? newValue) {
+                                dropdownChange: (String? newValue) {
                                   isar.writeTxnSync(() {
                                     settings.timeRange = int.parse(newValue!);
                                     isar.settings.putSync(settings);
@@ -517,7 +517,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   'celsius'.tr,
                                   'fahrenheit'.tr
                                 ],
-                                dropdownCange: (String? newValue) async {
+                                dropdownChange: (String? newValue) async {
                                   isar.writeTxnSync(() {
                                     settings.degrees = newValue == 'celsius'.tr
                                         ? 'celsius'
@@ -540,7 +540,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   'metric'.tr,
                                   'imperial'.tr
                                 ],
-                                dropdownCange: (String? newValue) async {
+                                dropdownChange: (String? newValue) async {
                                   isar.writeTxnSync(() {
                                     settings.measurements =
                                         newValue == 'metric'.tr
@@ -561,7 +561,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 dropdown: true,
                                 dropdownName: settings.wind.tr,
                                 dropdownList: <String>['kph'.tr, 'm/s'.tr],
-                                dropdownCange: (String? newValue) async {
+                                dropdownChange: (String? newValue) async {
                                   isar.writeTxnSync(() {
                                     settings.wind =
                                         newValue == 'kph'.tr ? 'kph' : 'm/s';
@@ -577,7 +577,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 dropdown: true,
                                 dropdownName: settings.pressure.tr,
                                 dropdownList: <String>['hPa'.tr, 'mmHg'.tr],
-                                dropdownCange: (String? newValue) async {
+                                dropdownChange: (String? newValue) async {
                                   isar.writeTxnSync(() {
                                     settings.pressure =
                                         newValue == 'hPa'.tr ? 'hPa' : 'mmHg';
@@ -593,7 +593,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 dropdown: true,
                                 dropdownName: settings.timeformat.tr,
                                 dropdownList: <String>['12'.tr, '24'.tr],
-                                dropdownCange: (String? newValue) {
+                                dropdownChange: (String? newValue) {
                                   isar.writeTxnSync(() {
                                     settings.timeformat =
                                         newValue == '12'.tr ? '12' : '24';
