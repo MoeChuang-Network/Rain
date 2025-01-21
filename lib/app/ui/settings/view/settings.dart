@@ -338,19 +338,18 @@ class _SettingsPageState extends State<SettingsPage> {
                                 info: true,
                                 infoSettings: true,
                                 infoWidget: _TextInfo(
-                                  info: settings.timeformat == '12'
-                                      ? DateFormat.jm(locale.languageCode)
-                                          .format(
-                                              DateFormat.Hm(locale.languageCode)
-                                                  .parse(weatherController
-                                                      .timeConvert(timeStart)
-                                                      .format(context)))
-                                      : DateFormat.Hm(locale.languageCode)
-                                          .format(
-                                              DateFormat.Hm(locale.languageCode)
-                                                  .parse(weatherController
-                                                      .timeConvert(timeStart)
-                                                      .format(context))),
+                                  info: () {
+                                    Locale currentLocale = Localizations.localeOf(context);
+                                    DateFormat dateFormat24 = DateFormat("HH:mm", currentLocale.toLanguageTag());
+                                    DateFormat dateFormat12 = DateFormat("hh:mm a", currentLocale.toLanguageTag());
+                                    try {
+                                      final time24 = dateFormat24.parse(timeStart);
+                                      final time12 = dateFormat12.format(time24);
+                                      return settings.timeformat == '12' ? time12 : timeStart;
+                                    } catch (_) {
+                                      return timeStart;
+                                    }
+                                  }(),
                                 ),
                                 onPressed: () async {
                                   final TimeOfDay? timeStartPicker =
@@ -398,19 +397,24 @@ class _SettingsPageState extends State<SettingsPage> {
                                 info: true,
                                 infoSettings: true,
                                 infoWidget: _TextInfo(
-                                  info: settings.timeformat == '12'
-                                      ? DateFormat.jm(locale.languageCode)
-                                          .format(
-                                              DateFormat.Hm(locale.languageCode)
-                                                  .parse(weatherController
-                                                      .timeConvert(timeEnd)
-                                                      .format(context)))
-                                      : DateFormat.Hm(locale.languageCode)
-                                          .format(
-                                              DateFormat.Hm(locale.languageCode)
-                                                  .parse(weatherController
-                                                      .timeConvert(timeEnd)
-                                                      .format(context))),
+                                  info: () {
+                                    Locale currentLocale = Localizations.localeOf(context);
+                                    DateFormat dateFormat24 = DateFormat("HH:mm", currentLocale.toLanguageTag());
+                                    DateFormat dateFormat12 = DateFormat("hh:mm a", currentLocale.toLanguageTag());
+                                    try {
+                                      final time24 = dateFormat24.parse(timeEnd);
+                                      final time12 = dateFormat12.format(time24);
+                                      return settings.timeformat == '12' ? time12 : timeEnd;
+                                    } catch (_) {
+                                      return timeEnd;
+                                      // Locale like bn-IN cannot be correctly handled by Flutter,
+                                      // so we just give up changing the date format
+                                      // Deep dive in:
+                                      // We have HH:mm stored in config but bn-IN only accept H:mm for 24-hour datetime,
+                                      // this may mean that these locales don't have a 24-hour time format,
+                                      // and we have to modify the value multiple times just for 2 strings :(
+                                    }
+                                  }(),
                                 ),
                                 onPressed: () async {
                                   final TimeOfDay? timeEndPicker =
