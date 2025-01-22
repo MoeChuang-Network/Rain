@@ -26,13 +26,8 @@ class NotificationShow {
 
     DarwinNotificationDetails darwinNotificationDetails =
         DarwinNotificationDetails(
-            presentAlert: false,
-            presentSound: false,
-            presentBadge: false,
-            presentList: false,
-            presentBanner: false,
-            interruptionLevel: InterruptionLevel.passive,
-            subtitle: 'Rain notification',
+            interruptionLevel: InterruptionLevel.active,
+            subtitle: 'Rain',
             categoryIdentifier: 'plainNotification');
 
     NotificationDetails notificationDetails = NotificationDetails(
