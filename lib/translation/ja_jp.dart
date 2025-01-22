@@ -135,6 +135,8 @@ class JaJp {
             'addWidget': 'ウィジェットを追加',
             'hideMap': '地図を非表示',
             'error': 'エラー',
-            'errNotificationPermission': 'この機能を使用するには、通知許可を与えてください',
+            'err_notify_denied': 'この機能を使用するには、通知許可を与えてください',
+            'err_loc_denied': '位置情報の許可が拒否された',
+            'err_loc_denied_forever': '位置情報の許可が永久に拒否された。そのため、位置情報が取得できない',
       };
 }
