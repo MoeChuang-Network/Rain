@@ -139,6 +139,8 @@ class EnUs {
         'addWidget': 'Add widget',
         'hideMap': 'Hide map',
         'error': 'Error',
-        'errNotificationPermission': 'Notification permission is not granted',
+        'err_notify_denied': 'Notification permission is not granted',
+        'err_loc_denied': 'Location permissions are denied',
+        'err_loc_denied_forever': 'Location permissions are permanently denied, we cannot request permissions',
       };
 }

@@ -236,7 +236,7 @@ void notificationAlertDialog(context) async {
       builder: (BuildContext context) {
         return AlertDialog.adaptive(
           title: Text('notifications'.tr, style: context.textTheme.titleLarge),
-          content: Text('errNotificationPermission'.tr,
+          content: Text('err_notify_denied'.tr,
               style: context.textTheme.titleMedium),
           actions: [
             TextButton(

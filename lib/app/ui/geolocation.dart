@@ -27,6 +27,7 @@ class SelectGeolocation extends StatefulWidget {
 
 class _SelectGeolocationState extends State<SelectGeolocation> {
   bool isLoading = false;
+  bool enableGetLocation = true;
   final formKeySearch = GlobalKey<FormState>();
   final _focusNode = FocusNode();
   final weatherController = Get.put(WeatherController());
@@ -187,7 +188,7 @@ class _SelectGeolocationState extends State<SelectGeolocation> {
                   ),
                   child: Container(
                     margin: const EdgeInsets.all(2.5),
-                    child: getLocationButton(),
+                    child: getLocationButton(enableGetLocation),
                   ),
                 ),
               ],
@@ -313,8 +314,8 @@ class _SelectGeolocationState extends State<SelectGeolocation> {
         ],
       );
 
-  getLocationButton() => IconButton(
-        onPressed: () async {
+  getLocationButton(bool enable) => IconButton(
+        onPressed: enable ? () async {
           bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
           if (!serviceEnabled) {
             if (!context.mounted) return;
@@ -326,11 +327,11 @@ class _SelectGeolocationState extends State<SelectGeolocation> {
             final location = await weatherController.getCurrentLocationSearch();
             fillControllerGeo(location);
           } catch (e) {
-            Get.snackbar('error', e.toString());
-            // TODO: Disable the button
+            Get.snackbar('error'.tr, e.toString());
+            enableGetLocation = false;
           }
           setState(() => isLoading = false);
-        },
+        }: null,
         icon: const Icon(
           IconsaxPlusLinear.location,
         ),

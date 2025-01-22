@@ -66,13 +66,12 @@ class WeatherController extends GetxController {
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
+        return Future.error('err_loc_denied'.tr);
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
+      return Future.error('err_loc_denied_forever'.tr);
     }
     return await Geolocator.getCurrentPosition();
   }
