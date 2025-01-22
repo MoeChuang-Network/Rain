@@ -130,9 +130,11 @@ class JaJp {
             'largeElement': '天気パネルを大きく表示する',
             'map': '地図',
             'clearCacheStore': 'キャッシュをクリア',
-            'deletedCacheStore': 'キャッシュがクリアされました',
+            'deletedCacheStore': 'クリア確認',
             'deletedCacheStoreQuery': '本当にキャッシュをクリアしますか？',
             'addWidget': 'ウィジェットを追加',
             'hideMap': '地図を非表示',
+            'error': 'エラー',
+            'errNotificationPermission': 'この機能を使用するには、通知許可を与えてください',
       };
 }
