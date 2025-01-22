@@ -42,7 +42,9 @@ void functionMenu(context, weatherController) {
                     value: settings.location,
                     onChange: (value) async {
                       if (value) {
-                        getLocation(context, weatherController);
+                        final loc =
+                            await getLocation(context, weatherController);
+                        if (!loc) return;
                       }
                       isar.writeTxnSync(() {
                         settings.location = value;
@@ -148,26 +150,33 @@ void functionMenu(context, weatherController) {
   );
 }
 
-void getLocation(context, weatherController) async {
+Future<bool> getLocation(context, weatherController) async {
   bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
   if (!serviceEnabled) {
-    if (!context.mounted) return;
-    locationAlertDialog(context);
-    return;
+    if (!context.mounted) return false;
+    locationAlertDialog(context, null);
+    return false;
   }
-  weatherController.getCurrentLocation();
+  try {
+    await weatherController.determinePosition();
+    return true;
+  } catch (e) {
+    locationAlertDialog(context, e.toString());
+    return false;
+  }
 }
 
-void locationAlertDialog(context) async {
+void locationAlertDialog(context, String? msg) async {
   await showAdaptiveDialog(
     context: context,
     builder: (BuildContext context) {
+      final message = msg ?? 'no_location'.tr;
       return AlertDialog.adaptive(
         title: Text(
           'location'.tr,
           style: context.textTheme.titleLarge,
         ),
-        content: Text('no_location'.tr, style: context.textTheme.titleMedium),
+        content: Text(message, style: context.textTheme.titleMedium),
         actions: [
           TextButton(
             onPressed: () => Get.back(result: false),
@@ -226,8 +235,9 @@ void notificationAlertDialog(context) async {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog.adaptive(
-          title: Text('error'.tr),
-          content: Text('errNotificationPermission'.tr),
+          title: Text('notifications'.tr, style: context.textTheme.titleLarge),
+          content: Text('errNotificationPermission'.tr,
+              style: context.textTheme.titleMedium),
           actions: [
             TextButton(
               onPressed: () => Get.back(result: false),
